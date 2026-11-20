@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="To-Do List Life Dashboard — Kelola hari-harimu dengan cantik 🌸" />
+  <title>🌸 Life Dashboard</title>
+
+  <!-- Favicon (SVG inline) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- =============================================
+     LAYOUT
+     ============================================= -->
+<div class="dashboard-layout">
+
+  <!-- ==================== TOP BAR ==================== -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="brand-icon">🌸</span>
+      <h1>Life Dashboard</h1>
+    </div>
+    <div class="topbar-actions">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Ganti tema">
+        <span class="toggle-icon" id="theme-icon">🌙</span>
+        <span id="theme-text">Dark</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="sidebar">
+
+    <!-- GREETING CARD -->
+    <div class="greeting-card card">
+      <div class="greeting-time" id="greeting-time">00:00:00</div>
+      <div class="greeting-date" id="greeting-date">— —</div>
+      <div class="floral-divider">✿ ❀ ✿</div>
+      <div class="greeting-message" id="greeting-msg">🌸 Selamat Datang!</div>
+      <div class="name-input-wrap mt-sm">
+        <input type="text" id="name-input" placeholder="Nama kamu..." maxlength="30" aria-label="Masukkan nama" />
+        <button id="name-save-btn" title="Simpan nama">✓</button>
+      </div>
+    </div>
+
+    <!-- POMODORO TIMER -->
+    <div class="card timer-container">
+      <div class="card-title">
+        <span class="title-emoji">🍅</span> Focus Timer
+      </div>
+
+      <!-- Mode Selector -->
+      <div class="timer-modes">
+        <button class="mode-btn active" data-mode="pomodoro">Pomodoro</button>
+        <button class="mode-btn" data-mode="short">Short Break</button>
+        <button class="mode-btn" data-mode="long">Long Break</button>
+      </div>
+
+      <!-- Ring -->
+      <div class="timer-ring-wrap">
+        <svg class="timer-svg" width="130" height="130" viewBox="0 0 130 130" aria-hidden="true">
+          <circle class="timer-track"    cx="65" cy="65" r="54" />
+          <circle class="timer-progress" cx="65" cy="65" r="54"
+                  id="timer-progress"
+                  stroke-dasharray="339.29"
+                  stroke-dashoffset="0" />
+        </svg>
+        <div class="timer-display">
+          <span class="timer-time" id="timer-time">25:00</span>
+          <span class="timer-label" id="timer-label">Focus</span>
+        </div>
+      </div>
+
+      <!-- Session Dots (4 dots = 1 set) -->
+      <div class="timer-session-count" title="Sesi fokus selesai">
+        <span class="session-dot" aria-label="Sesi 1"></span>
+        <span class="session-dot" aria-label="Sesi 2"></span>
+        <span class="session-dot" aria-label="Sesi 3"></span>
+        <span class="session-dot" aria-label="Sesi 4"></span>
+      </div>
+
+      <!-- Controls -->
+      <div class="timer-controls">
+        <button class="btn btn-primary" id="timer-start">▶ Start</button>
+        <button class="btn btn-secondary" id="timer-stop" disabled>⏸ Stop</button>
+        <button class="btn btn-secondary" id="timer-reset">↺ Reset</button>
+      </div>
+
+      <p class="timer-status" id="timer-status">Timer siap dimulai ✨</p>
+    </div>
+
+    <!-- MOTIVATIONAL QUOTE -->
+    <div class="card quote-card">
+      <p class="quote-text" id="quote-text">"Memuat kutipan..."</p>
+      <p class="quote-author" id="quote-author">— ...</p>
+      <button class="quote-refresh" id="quote-refresh">🌸 Kutipan Baru</button>
+    </div>
+
+  </aside>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="main-content">
+
+    <!-- TO-DO LIST -->
+    <section class="card">
+      <div class="todo-header">
+        <div class="card-title">
+          <span class="title-emoji">✅</span> To-Do List
+        </div>
+        <div class="todo-controls">
+          <label for="sort-select" class="sr-only">Urutkan tugas</label>
+          <select id="sort-select" aria-label="Urutkan tugas">
+            <option value="default">🗂️ Default</option>
+            <option value="alpha-asc">🔡 A → Z</option>
+            <option value="alpha-desc">🔡 Z → A</option>
+            <option value="undone-first">📋 Belum selesai dulu</option>
+            <option value="done-first">✅ Selesai dulu</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Add Task -->
+      <div class="add-task-form">
+        <input
+          type="text"
+          id="task-input"
+          placeholder="✍️ Tambahkan tugas baru... (tekan Enter)"
+          maxlength="200"
+          aria-label="Tambah tugas baru"
+        />
+        <button class="btn btn-primary btn-add" id="add-task-btn">
+          + Tambah
+        </button>
+      </div>
+
+      <!-- Stats -->
+      <div class="task-stats">
+        <span class="stat-item">🌸 Total: <strong id="total-count">0</strong></span>
+        <span class="stat-item">✅ Selesai: <strong id="done-count">0</strong></span>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-wrap" title="Progress penyelesaian tugas" aria-label="Progress tugas">
+        <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+      </div>
+
+      <!-- Task List -->
+      <ul class="task-list" id="task-list" role="list" aria-label="Daftar tugas">
+        <!-- Tasks rendered by JS -->
+      </ul>
+    </section>
+
+    <!-- QUICK LINKS -->
+    <section class="card">
+      <div class="card-title">
+        <span class="title-emoji">🔗</span> Quick Links
+      </div>
+
+      <!-- Links Grid -->
+      <div class="quick-links-grid" id="quick-links-list">
+        <!-- Links rendered by JS -->
+      </div>
+
+      <div class="floral-divider">✿ Tambah Link Baru ✿</div>
+
+      <!-- Add Link Form -->
+      <div class="quick-link-add-form mt-sm">
+        <div class="input-row">
+          <input type="text"  id="link-icon" placeholder="🔗 Emoji" maxlength="4" style="width: 80px; flex-shrink:0;" aria-label="Emoji icon" />
+          <input type="text"  id="link-name" placeholder="Nama situs..." maxlength="30" aria-label="Nama situs" />
+        </div>
+        <div class="input-row">
+          <input type="url"   id="link-url"  placeholder="https://..." aria-label="URL situs" />
+          <button class="btn btn-primary" id="add-link-btn" style="white-space:nowrap;">+ Tambah</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUICK NOTES -->
+    <section class="card quick-notes">
+      <div class="card-title">
+        <span class="title-emoji">📝</span> Quick Notes
+      </div>
+      <textarea
+        id="notes-area"
+        placeholder="Tulis catatan cepat di sini... 🌸&#10;Tersimpan otomatis!"
+        aria-label="Catatan cepat"
+        rows="5"
+      ></textarea>
+    </section>
+
+  </main>
+
+</div><!-- .dashboard-layout -->
+
+<!-- Toast Notification Container -->
+<div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<!-- JavaScript -->
+<script src="js/app.js"></script>
+
+</body>
+</html>
